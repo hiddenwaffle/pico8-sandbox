@@ -3,6 +3,7 @@ version 18
 __lua__
 
 function _init()
+  g_state = 'game'
   g_t = 0
   g_heart = {
     x = 60, -- (128 / 2) - (8 / 2) = 60
@@ -32,10 +33,15 @@ function reset_star(star)
 end
 
 function _update60()
-  update_player()
-  update_stars()
-  check_collision()
-  check_level_up()
+  if g_state == 'game' then
+    update_player()
+    update_stars()
+    check_collision()
+    check_level_up()
+    check_game_over()
+  elseif g_state == 'gameover' then
+    update_gameover()
+  end
 end
 
 function update_player()
@@ -180,18 +186,34 @@ function check_level_up()
   end
 end
 
+function check_game_over()
+  if g_health < 0 then
+    g_state = 'gameover'
+  end
+end
+
+function update_gameover()
+  if btnp(5) then
+    _init()
+  end
+end
+
 function _draw()
-  cls(1)
-  draw_health()
-  draw_player()
-  draw_stars()
-  draw_status_bar()
+  if g_state == 'game' then
+    cls(1)
+    draw_health()
+    draw_player()
+    draw_stars()
+    draw_status_bar()
+  else
+    draw_gameover()
+  end
 end
 
 -- 128 - 100 = 28
 -- 28 / 7 = 14
 function draw_health()
-  local offset = g_health -- assumes 0 <= g_health <= 100
+  local offset = mid(g_health, 0, 100) -- assumes health:pixel is 1:1
   rectfill(14, 119, 14 + 100,    123,  8) -- red
   rectfill(14, 119, 14 + offset, 123, 10) -- yellow
 end
@@ -211,6 +233,11 @@ end
 function draw_status_bar()
   rectfill(0, 0, 128, 7, 0)
   print('level: ' .. g_star_count_target, 0, 0, 6)
+end
+
+function draw_gameover()
+  rectfill(0, 62, 128, 70, 0)
+  print('press ❎ to try again', 25, 64, 7)
 end
 
 __gfx__
