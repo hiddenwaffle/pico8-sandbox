@@ -28,8 +28,6 @@ function reset_star(star)
   star.y = 0
   star.dx = 0
   star.dy = 0
-  star.ax = 0
-  star.ay = 0
 end
 
 function _update60()
@@ -112,25 +110,20 @@ function activate_star(star)
   local side = flr(rnd(3)) -- 3 possible sides
   if side == 0 then -- left
     star.x = 0
-    star.y = flr(rnd(65)) + 64 -- only bottom half
+    star.y = flr(rnd(128))
     star.dx = 1
-    star.dy = 0 -- todo ax ay instead
+    star.dy = rnd(1) * -1
   elseif side == 1 then -- right
     star.x = 128
-    star.y = flr(rnd(65)) + 64 -- only bottom half
+    star.y = flr(rnd(128))
     star.dx = -1
-    star.dy = 0 -- todo ax ay instead
+    star.dy = rnd(1) * -1
   else -- bottom
     star.x = flr(rnd(128)) + 1
     star.y = 128
-    star.dx = 0
-    star.dy = -2.75 -- todo ax ay instead
+    star.dx = 1 - rnd(2)
+    star.dy = -2.75 + rnd(1) - 0.5
   end
-end
-
--- random integer between 0 and 3
-function rndi_0_to_3()
-  return
 end
 
 function count_active_stars()
