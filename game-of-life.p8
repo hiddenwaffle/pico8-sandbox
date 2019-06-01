@@ -53,6 +53,9 @@ function _update()
     next_gen()
     g_t = 0
   end
+  if btnp(5) then
+    _init()
+  end
 end
 
 function next_gen()
@@ -98,6 +101,7 @@ function _draw()
       rectfill(x * g_size, y * g_size, (x + 1) * g_size, (y + 1) * g_size, 15)
     end
   end
+  print('press ❎ to restart', 30, 122, 5)
 end
 
 __gfx__
