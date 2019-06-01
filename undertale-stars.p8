@@ -3,6 +3,7 @@ version 18
 __lua__
 
 function _init()
+  g_t = 0
   g_heart = {
     x = 60, -- (128 / 2) - (8 / 2) = 60
     y = 55
@@ -11,7 +12,7 @@ function _init()
   for i = 1, 100 do
     g_stars[i] = create_stars()
   end
-  g_star_count_target = 10
+  g_star_count_target = 2
   g_health = 100 -- 0 to 100
 end
 
@@ -34,6 +35,7 @@ function _update60()
   update_player()
   update_stars()
   check_collision()
+  check_level_up()
 end
 
 function update_player()
@@ -43,8 +45,8 @@ function update_player()
   if (btn(1)) dx =  2
   if (btn(2)) dy = -2
   if (btn(3)) dy =  2
-  g_heart.x += dx
-  g_heart.y += dy
+  g_heart.x = mid(g_heart.x + dx, 0, 120) -- 120 = 128 - 8
+  g_heart.y = mid(g_heart.y + dy, 8, 120) -- right below status bar
 end
 
 function update_stars()
@@ -107,7 +109,7 @@ end
 
 function activate_star(star)
   star.active = true
-  local side = flr(rnd(3)) -- 3 possible sides
+  local side = flr(rnd(6)) -- 4 possible sides, top counted 3x
   if side == 0 then -- left
     star.x = 0
     star.y = flr(rnd(128))
@@ -118,6 +120,11 @@ function activate_star(star)
     star.y = flr(rnd(128))
     star.dx = -1
     star.dy = rnd(1) * -1
+  elseif side == 2 or side == 3 or side == 4 then -- top
+    star.x = flr(rnd(128)) + 1
+    star.y = 0
+    star.dx = 1 - rnd(2)
+    star.dy = 0
   else -- bottom
     star.x = flr(rnd(128)) + 1
     star.y = 128
@@ -164,11 +171,28 @@ function handle_collision(star)
   reset_star(star)
 end
 
+function check_level_up()
+  g_t += 1
+  if g_t > 180 then -- 60 frames * 3 seconds
+    g_star_count_target += 1
+    g_t = 0
+  end
+end
+
 function _draw()
   cls(1)
   draw_health()
   draw_player()
   draw_stars()
+  draw_status_bar()
+end
+
+-- 128 - 100 = 28
+-- 28 / 7 = 14
+function draw_health()
+  local offset = g_health -- assumes 0 <= g_health <= 100
+  rectfill(14, 119, 14 + 100,    123,  8) -- red
+  rectfill(14, 119, 14 + offset, 123, 10) -- yellow
 end
 
 function draw_player()
@@ -183,12 +207,9 @@ function draw_stars()
   end
 end
 
--- 128 - 100 = 28
--- 28 / 7 = 14
-function draw_health()
-  local offset = g_health -- assumes 0 <= g_health <= 100
-  rectfill(14, 119, 14 + 100,    123,  8) -- red
-  rectfill(14, 119, 14 + offset, 123, 10) -- yellow
+function draw_status_bar()
+  rectfill(0, 0, 128, 7, 0)
+  print('level: ' .. g_star_count_target, 0, 0, 6)
 end
 
 __gfx__
