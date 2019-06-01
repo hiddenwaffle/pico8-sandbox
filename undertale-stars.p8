@@ -79,7 +79,8 @@ function cleanup_stars()
   for star in all(g_stars) do
     if star.x < 0 or
        star.x > 128 or
-       star.y > 128 then -- edges of screen except top
+       star.y < -32 or -- if one goes too high
+       star.y > 128 then
       reset_star(star)
     end
   end
@@ -101,8 +102,28 @@ end
 
 function activate_star(star)
   star.active = true
-  star.dx = 1
-  star.dy = 1
+  local side = flr(rnd(3)) -- 3 possible sides
+  if side == 0 then -- left
+    star.x = 0
+    star.y = flr(rnd(65)) + 64 -- only bottom half
+    star.dx = 1
+    star.dy = 0 -- todo ax ay instead
+  elseif side == 1 then -- right
+    star.x = 128
+    star.y = flr(rnd(65)) + 64 -- only bottom half
+    star.dx = -1
+    star.dy = 0 -- todo ax ay instead
+  else -- bottom
+    star.x = flr(rnd(128)) + 1
+    star.y = 128
+    star.dx = 0
+    star.dy = -1 -- todo ax ay instead
+  end
+end
+
+-- random integer between 0 and 3
+function rndi_0_to_3()
+  return
 end
 
 function count_active_stars()
@@ -145,9 +166,9 @@ end
 
 function _draw()
   cls(1)
+  draw_health()
   draw_player()
   draw_stars()
-  draw_health()
 end
 
 function draw_player()
