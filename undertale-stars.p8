@@ -12,6 +12,7 @@ function _init()
     g_stars[i] = create_stars()
   end
   g_star_count_target = 1
+  g_health = 100 -- 0 to 100
 end
 
 function create_stars()
@@ -34,6 +35,7 @@ end
 function _update60()
   update_player()
   update_stars()
+  check_collision()
 end
 
 function update_player()
@@ -75,7 +77,9 @@ end
 function cleanup_stars()
   local current = 0
   for star in all(g_stars) do
-    if star.x < 0 or star.x > 128 or star.y > 128 then -- edges of screen except top
+    if star.x < 0 or
+       star.x > 128 or
+       star.y > 128 then -- edges of screen except top
       reset_star(star)
     end
   end
@@ -109,10 +113,41 @@ function count_active_stars()
   return count
 end
 
+function check_collision()
+  for star in all(g_stars) do
+    if heart_overlap(star) then
+      handle_collision(star)
+    end
+  end
+end
+
+-- hitboxes slightly smaller than 8x8
+-- modified from: https://www.geeksforgeeks.org/find-two-rectangles-overlap/
+function heart_overlap(star)
+  local l1_x = g_heart.x + 1
+  local l1_y = g_heart.y + 1
+  local r1_x = g_heart.x + 6
+  local r1_y = g_heart.y + 6
+  local l2_x = star.x + 1
+  local l2_y = star.y + 1
+  local r2_x = star.x + 6
+  local r2_y = star.y + 6
+  if (l1_x > r2_x or l2_x > r1_x) return false
+  if (l1_y > r2_y or l2_y > r1_y) return false
+  return true
+end
+
+function handle_collision(star)
+  g_health -= 10
+  -- todo: handle g_health <= 0
+  reset_star(star)
+end
+
 function _draw()
   cls(1)
   draw_player()
   draw_stars()
+  draw_health()
 end
 
 function draw_player()
@@ -125,6 +160,14 @@ function draw_stars()
       spr(2 + flr(star.frame), star.x, star.y)
     end
   end
+end
+
+-- 128 - 100 = 28
+-- 28 / 7 = 14
+function draw_health()
+  local offset = g_health -- assumes 0 <= g_health <= 100
+  rectfill(14, 119, 14 + 100,    123,  8) -- red
+  rectfill(14, 119, 14 + offset, 123, 10) -- yellow
 end
 
 __gfx__
