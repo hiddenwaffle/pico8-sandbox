@@ -124,7 +124,7 @@ function activate_star(star)
     star.x = flr(rnd(128)) + 1
     star.y = 128
     star.dx = 0
-    star.dy = -1 -- todo ax ay instead
+    star.dy = -2.75 -- todo ax ay instead
   end
 end
 
