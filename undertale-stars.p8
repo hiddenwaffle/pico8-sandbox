@@ -11,7 +11,7 @@ function _init()
   for i = 1, 100 do
     g_stars[i] = create_stars()
   end
-  g_star_count_target = 1
+  g_star_count_target = 10
   g_health = 100 -- 0 to 100
 end
 
