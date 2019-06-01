@@ -52,6 +52,7 @@ end
 function update_stars()
   animate_stars()
   move_stars()
+  gravitate_stars()
   cleanup_stars()
   activate_stars()
 end
@@ -71,6 +72,12 @@ function move_stars()
       star.x += star.dx
       star.y += star.dy
     end
+  end
+end
+
+function gravitate_stars()
+  for star in all(g_stars) do
+    star.dy += 0.03
   end
 end
 
