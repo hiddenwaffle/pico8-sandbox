@@ -2,65 +2,6 @@ pico-8 cartridge // http://www.pico-8.com
 version 18
 __lua__
 
-function _init()
-  bullet = { }
-end
-
-function _draw()
-  cls()
-  for b in all(bullet) do
-    b:draw()
-  end
-end
-
-function _update60()
-  dx = 0
-  dy = -3
-  if btn(0) then
-    dx = -3
-    dy = 0
-  end
-  if btn(1) then
-    dx = 3
-    dy = 0
-  end
-  if btn(2) then
-    dx = 0
-    dy = -3
-  end
-  if btn(3) then
-    dx = 0
-    dy = 3
-  end
-  if btn(4) then
-    add_new_bullet(dx, dy)
-  end
-  for b in all(bullet) do
-    b:update()
-  end
-end
-
-function add_new_bullet(_dx, _dy)
-  add(bullet, {
-    x = 63,
-    y = 63,
-    dx = _dx,
-    dy = _dy,
-    life = 30,
-    draw = function (self)
-      pset(self.x, self.y, 7)
-    end,
-    update = function (self)
-      self.x += self.dx
-      self.y += self.dy
-      self.life -= 1
-      if self.life < 0 then
-        del(bullet, self)
-      end
-    end
-  })
-end
-
 __gfx__
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
