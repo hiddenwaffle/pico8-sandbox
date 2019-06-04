@@ -4,29 +4,44 @@ __lua__
 
 -- todo: parallax backgrounds
 
+-- all globals are declared in this function
 function _init()
-  init_bird()
+  -- constants
+  c_pipe_spacing = 96
+  -- variables
+  g_bird = create_bird()
+  g_pipes = create_pipes()
 end
 
-function _draw()
-  cls(12)
-  draw_bird()
-end
-
-function _update60()
-  update_bird()
-end
-
--->8
-
-function init_bird()
-  g_bird = {
+function create_bird()
+  return {
     y = 64,
     dy = 0
   }
 end
 
+function create_pipes()
+  return {
+    { x = 128 + c_pipe_spacing * 0, gap = calculate_gap() },
+    { x = 128 + c_pipe_spacing * 1, gap = calculate_gap() },
+    { x = 128 + c_pipe_spacing * 2, gap = calculate_gap() }
+  }
+end
+
+function calculate_gap()
+  return rnd(36) + 24
+end
+
 -->8
+
+function _update60()
+  update_t()
+  update_bird()
+  update_pipes()
+end
+
+function update_t()
+end
 
 function update_bird()
   if any_btnp() then
@@ -34,7 +49,10 @@ function update_bird()
   end
   g_bird.dy = mid(g_bird.dy + 0.1, -2, 2) -- gravity
   g_bird.y += g_bird.dy
-
+  -- prevent too high
+  if g_bird.y < -24 then
+    g_bird.y = -24
+  end
   -- temporary reset to mid screen
   if g_bird.y > 112 then
     g_bird.y = 64
@@ -45,10 +63,51 @@ function any_btnp()
   return btnp(0) or btnp(1) or btnp(2) or btnp(3) or btnp(4) or btnp(5)
 end
 
+function update_pipes()
+  for pipe in all(g_pipes) do
+    pipe.x -= 0.75
+  end
+  if g_pipes[1].x < -32 then
+    reset_left_pipe()
+  end
+end
+
+-- like a treadmill
+function reset_left_pipe()
+  local moving_pipe = g_pipes[1]
+  moving_pipe.gap = calculate_gap()
+  moving_pipe.x = g_pipes[#g_pipes].x + c_pipe_spacing
+  del(g_pipes, moving_pipe)
+  add(g_pipes, moving_pipe)
+end
+
+function debug(str) -- todo: temporary
+  printh(str, 'log')
+end
+
 -->8
+
+function _draw()
+  cls(12)
+  draw_ground()
+  draw_pipes()
+  draw_bird()
+end
+
+function draw_ground()
+  rectfill(0, 113, 128, 128, 6)
+end
 
 function draw_bird(x, y)
   spr(1, 25, g_bird.y, 2, 2)
+end
+
+function draw_pipes()
+  debug(g_pipes[1].gap)
+  for pipe in all(g_pipes) do
+    rectfill(pipe.x,             0, pipe.x + 24, pipe.gap, 3) -- top
+    rectfill(pipe.x, pipe.gap + 40, pipe.x + 24,      112, 3) -- bottom
+  end
 end
 
 __gfx__
