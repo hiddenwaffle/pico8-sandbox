@@ -11,6 +11,7 @@ function _init()
   -- variables
   g_bird = create_bird()
   g_pipes = create_pipes()
+  g_pipe_t = 0
 end
 
 function create_bird()
@@ -65,7 +66,7 @@ end
 
 function update_pipes()
   for pipe in all(g_pipes) do
-    pipe.x -= 0.75
+    pipe.x -= 1 -- cannot use subpixel without jitter unless panning with camera() ?
   end
   if g_pipes[1].x < -32 then
     reset_left_pipe()
