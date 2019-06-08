@@ -1,0 +1,65 @@
+pico-8 cartridge // http://www.pico-8.com
+version 18
+__lua__
+
+function _init()
+  poke(0x5f2d, 1)
+  mouse = make_pvector(0, 0)
+  center = make_pvector(64, 64)
+  camera(-64, -64)
+end
+
+function _update60()
+  mouse.x = stat(32)
+  mouse.y = stat(33)
+  mouse:sub(center)
+  -- mouse:normalize()
+  -- mouse:mult(20)
+  mouse:set_mag(25)
+end
+
+function _draw()
+  cls(1)
+  circ(mouse.x, mouse.y, 4, 12)
+  line(0, 0, mouse.x, mouse.y, 11)
+  local m = mouse:mag()
+  rect(0, 0, m, 20, 8)
+end
+
+-->8
+
+function make_pvector(x, y)
+  return {
+    x = x,
+    y = y,
+    sub = function (self, other)
+      self.x -= other.x
+      self.y -= other.y
+    end,
+    mult = function (self, amt)
+      self.x *= amt
+      self.y *= amt
+    end,
+    mag = function (self)
+      return sqrt(self.x ^ 2 + self.y ^ 2)
+    end,
+    normalize = function (self)
+      local m = self:mag()
+      -- todo: handle zero
+      self.x /= m
+      self.y /= m
+    end,
+    set_mag = function (self, amt)
+      self:normalize()
+      self:mult(amt)
+    end
+  }
+end
+
+__gfx__
+00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00700700000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00077000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00077000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+00700700000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
