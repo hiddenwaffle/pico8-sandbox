@@ -16,12 +16,12 @@ end
 function _update60()
   mouse_x = stat(32)
   mouse_y = stat(33)
+  a:hover(mouse_x, mouse_y)
   for m in all(movers) do
     local force = a:attract(m)
-    -- m:apply_force(force)
-    -- m:update()
+    m:apply_force(force)
+    m:update()
     a:drag()
-    a:hover(mouse_x, mouse_y)
   end
 end
 
@@ -31,17 +31,34 @@ function _draw()
     a:display()
     m:display()
   end
+  circ(mouse_x, mouse_y, 4, 12)
 end
 
 -->8
 
 function make_attractor()
   return {
+    location = make_pvector(64, 64),
+    mass = 0.5, -- 20,
+    g = 0.02, --1,
+    drag_offset = make_pvector(0, 0),
     attract = function (self, m)
+      -- direction of the force
+      local force = pvector_sub(self.location, m.location)
+      local d_sq = force:mag_sq()
+      d_sq = mid(25, 625, d_sq) -- <-- possible to not need this?
+      force:normalize()
+      -- magnitude of the force
+      local strength = (self.g * self.mass * m.mass) / d_sq
+      -- put magnitude and direction together
+      force:mult(strength)
+      return force
     end,
     drag = function (self)
     end,
     hover = function (self, x, y)
+      self.location.x = x
+      self.location.y = y
     end,
     display = function (self)
     end
@@ -96,6 +113,10 @@ end
 
 function pvector_div(v, n)
   return make_pvector(v.x / n, v.y / n)
+end
+
+function pvector_sub(a, b)
+  return make_pvector(a.x - b.x, a.y - b.y)
 end
 
 function make_pvector(x, y)
