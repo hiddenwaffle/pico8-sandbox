@@ -6,14 +6,14 @@ function _init()
   poke(0x5f2d, 1)
   mouse_x = 0
   mouse_y = 0
-  pss = { }
+  pss = { make_particle_system(64, 12) }
 end
 
 function _update60()
   mouse_x = stat(32)
   mouse_y = stat(33)
   if btnp(5) then
-    local ps = make_particle_system(mouse_x, mouse_y)
+    local ps = make_particle_system(mouse_x, mouse_y) -- (rnd(8) + (64 - 4), rnd(16) + 16)
     add(pss, ps)
   end
   for ps in all(pss) do
