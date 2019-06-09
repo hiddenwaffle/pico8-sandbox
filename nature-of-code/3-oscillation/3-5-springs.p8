@@ -2,76 +2,41 @@ pico-8 cartridge // http://www.pico-8.com
 version 18
 __lua__
 
+-- f = -k * x (hooke's law)
+-- k is a constant
+-- x is the displacement from its rest positition
+
 function _init()
-  poke(0x5f2d, 1)
-  mouse_x = 0
-  mouse_y = 0
-  movers = { }
-  for i = 1, 3 do
-    movers[i] = make_mover(i % 3 + 9)
-  end
-  a = make_attractor()
+  origin = make_pvector(64, 0)
+  rest_length = 64
+  bob = make_mover(64, rest_length + 12, 7)
 end
 
 function _update60()
-  mouse_x = stat(32)
-  mouse_y = stat(33)
-  a:hover(mouse_x, mouse_y)
-  for m in all(movers) do
-    local force = a:attract(m)
-    m:apply_force(force)
-    m:update()
-    a:drag()
-  end
+  local spring = pvector_sub(bob.location, origin)
+  local current_length = spring:mag()
+  spring:normalize()
+  local k = 0.05
+  local stretch = current_length - rest_length
+  spring:mult(-k * stretch)
+  bob:apply_force(spring)
+  bob:update()
 end
 
 function _draw()
   cls(1)
-  for m in all(movers) do
-    a:display()
-    m:display()
-  end
-  circ(mouse_x, mouse_y, 4, 12)
+  print(bob.acceleration.y, 4, 4, 7)
+  line(origin.x, origin.y, bob.location.x, bob.location.y, 7)
+  bob:display()
 end
 
 -->8
 
-function make_attractor()
-  return {
-    location = make_pvector(64, 64),
-    mass = 0.5, -- 20,
-    g = 0.02, --1,
-    drag_offset = make_pvector(0, 0),
-    attract = function (self, m)
-      -- direction of the force
-      local force = pvector_sub(self.location, m.location)
-      local d_sq = force:mag_sq()
-      d_sq = mid(25, 625, d_sq) -- <-- possible to not need this?
-      force:normalize()
-      -- magnitude of the force
-      local strength = (self.g * self.mass * m.mass) / d_sq
-      -- put magnitude and direction together
-      force:mult(strength)
-      return force
-    end,
-    drag = function (self)
-    end,
-    hover = function (self, x, y)
-      self.location.x = x
-      self.location.y = y
-    end,
-    display = function (self)
-    end
-  }
-end
-
--->8
-
-function make_mover(color)
+function make_mover(x, y, color)
   return {
     color = color,
     mass = rnd(2) + 1,
-    location = make_pvector(rnd(128), rnd(16)),
+    location = make_pvector(x, y),
     velocity = make_pvector(0, 0),
     acceleration = make_pvector(0, 0),
     -- newton's 2nd law! (the beginning)
@@ -83,24 +48,6 @@ function make_mover(color)
       self.velocity:add(self.acceleration)
       self.location:add(self.velocity)
       self.acceleration:mult(0)
-    end,
-    edges = function (self)
-      if (self.location.x > 127) then
-        self.location.x = 127
-        self.velocity.x *= -1
-      end
-      if (self.location.x < 0) then
-        self.location.x = 0
-        self.velocity.x *= -1
-      end
-      if (self.location.y > 127) then
-        self.location.y = 127
-        self.velocity.y *= -1
-      end
-      if (self.location.y < 0) then
-        self.location.y = 0
-        self.velocity.y *= -1
-      end
     end,
     display = function (self)
       circfill(self.location.x, self.location.y, self.mass * 5, self.color)

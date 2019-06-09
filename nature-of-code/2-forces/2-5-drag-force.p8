@@ -133,7 +133,7 @@ function make_pvector(x, y)
       self.y *= amt
     end,
     mag = function (self)
-      return sqrt(self.mag_sq)
+      return sqrt(self:mag_sq())
     end,
     mag_sq = function (self)
       return self.x ^ 2 + self.y ^ 2
