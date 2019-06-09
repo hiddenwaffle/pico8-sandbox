@@ -2,22 +2,29 @@ pico-8 cartridge // http://www.pico-8.com
 version 18
 __lua__
 
--- this is very different from the video because
--- p8 does not have a lot of the functions used
-
 function _init()
   len = 64
   origin = make_pvector(64, 0)
   bob = make_pvector(64, len)
+  angle = 1/8
+  a_vel = 0
+  a_acc = 0
 end
 
 function _update60()
+  bob.x = origin.x + len * sin(angle)
+  bob.y = origin.y + len * cos(angle)
+  a_acc = 0.001 * sin(angle)
+  angle += a_vel
+  a_vel += a_acc
+  a_vel *= 0.99 -- damping to let it eventually stop
 end
 
 function _draw()
   cls(1)
   line(origin.x, origin.y, bob.x, bob.y)
-  circ(bob.x, bob.y, 6)
+  circfill(bob.x, bob.y, 6, 11)
+  circ(bob.x, bob.y, 6, 7)
 end
 
 -->8

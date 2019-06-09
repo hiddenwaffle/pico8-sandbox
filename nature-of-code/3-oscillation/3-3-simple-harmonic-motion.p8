@@ -2,9 +2,6 @@ pico-8 cartridge // http://www.pico-8.com
 version 18
 __lua__
 
--- this is very different from the video because
--- p8 does not have a lot of the functions used
-
 function _init()
   t = 0
   amplitude = 32
