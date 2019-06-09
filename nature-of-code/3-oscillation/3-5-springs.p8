@@ -20,6 +20,13 @@ function _update60()
   local stretch = current_length - rest_length
   spring:mult(-k * stretch)
   bob:apply_force(spring)
+
+  -- additional forces
+  local wind = make_pvector(0.1, 0)
+  if (btn(5)) bob:apply_force(wind)
+  local gravity = make_pvector(0, 0.1)
+  bob:apply_force(gravity)
+
   bob:update()
 end
 
