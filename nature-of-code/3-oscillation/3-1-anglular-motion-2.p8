@@ -6,7 +6,9 @@ __lua__
 -- p8 does not have a lot of the functions used
 
 function _init()
-  t = 0
+  a = 0
+  a_velocity = 0
+  a_acceleration = 0.0001
   camera(-64, -64)
   local top_left      = make_pvector(-15, -12)
   local top_right     = make_pvector( 15, -12)
@@ -16,13 +18,20 @@ function _init()
 end
 
 function _update60()
-  t += 0.01
-  if (t >= 1) t = 0
-  poly.rotation = t
+  mouse_x = stat(32)
+  mouse_y = stat(33)
+  a_velocity = mid(a_velocity + a_acceleration, -0.05, 0.05)
+  a += a_velocity
+  poly.rotation = a
+  if (btn(0)) a_acceleration = mid(a_acceleration + 0.0001, -0.0005, 0.0005)
+  if (btn(1)) a_acceleration = mid(a_acceleration - 0.0001, -0.0005, 0.0005)
 end
 
 function _draw()
   cls(1)
+  print('vel: ' .. a_velocity, -60, -60)
+  print('acc: ' .. a_acceleration, -60, -53)
+  print('⬅️ / ➡️ to affect acc', -60, -46)
   poly:draw()
 end
 
