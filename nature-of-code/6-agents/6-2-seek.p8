@@ -21,7 +21,6 @@ function _draw()
   cls(1)
   v:display()
   circ(mouse_x, mouse_y, 4, 12)
-  -- print(v.location.x .. ', ' .. v.location.y, 4, 4, 7)
 end
 
 -->8
@@ -32,8 +31,8 @@ function make_vehicle(x, y)
     velocity = make_vector(0, -2),
     location = make_vector(x, y),
     r = 6,
-    maxspeed = 0.04,
-    maxforce = 0.1,
+    maxspeed = 1,
+    maxforce = 0.05, -- todo: is this affecting anything?
     update = function (self)
       self.velocity:add(self.acceleration)
       self.velocity:limit(self.maxspeed)
