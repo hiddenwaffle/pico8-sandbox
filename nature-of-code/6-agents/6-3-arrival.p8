@@ -2,9 +2,6 @@ pico-8 cartridge // http://www.pico-8.com
 version 18
 __lua__
 
--- the video jumps over some of this, so i used:
--- https://github.com/nature-of-code/noc-examples-processing/tree/master/chp06_agents/NOC_6_01_Seek
-
 function _init()
   poke(0x5f2d, 1)
   mouse_x = 0
@@ -16,7 +13,7 @@ function _update60()
   mouse_x = stat(32)
   mouse_y = stat(33)
   local mouse = make_vector(mouse_x, mouse_y)
-  v:seek(mouse)
+  v:arrive(mouse)
   v:update()
 end
 
@@ -35,7 +32,7 @@ function make_vehicle(x, y)
     location = make_vector(x, y),
     r = 6,
     maxspeed = 1,
-    maxforce = 0.05, -- todo: is this affecting anything?
+    maxforce = 0.025,
     update = function (self)
       self.velocity:add(self.acceleration)
       self.velocity:limit(self.maxspeed)
@@ -45,10 +42,22 @@ function make_vehicle(x, y)
     apply_force = function (self, force)
       self.acceleration:add(force)
     end,
-    seek = function (self, target)
+    -- seek = function (self, target)
+    --   local desired = vector_sub(target, self.location)
+    --   desired:mult(self.maxspeed)
+    --   local steer = vector_sub(desired, self.velocity)
+    --   steer:limit(self.maxforce)
+    --   self:apply_force(steer)
+    -- end,
+    arrive = function (self, target)
       local desired = vector_sub(target, self.location)
-      -- desired:normalize()
-      desired:mult(self.maxspeed)
+      local d = desired:mag()
+      if d < 17 then
+        local m = (d / 17) * self.maxspeed -- a.k.a. p5's map()
+        desired:set_mag(m)
+      else
+        desired:set_mag(self.maxspeed)
+      end
       local steer = vector_sub(desired, self.velocity)
       steer:limit(self.maxforce)
       self:apply_force(steer)
