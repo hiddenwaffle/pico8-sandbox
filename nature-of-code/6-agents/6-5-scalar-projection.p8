@@ -4,25 +4,29 @@ __lua__
 
 function _init()
   poke(0x5f2d, 1)
-  mouse_x = 0
-  mouse_y = 0
-  camera(-64, -64)
-  positive_x = make_vector(64, 0)
+  g_a = make_vector(5, 106)
+  g_b = make_vector(106, 88)
 end
 
-function _update60()
-  mouse_x = stat(32) - 64
-  mouse_y = stat(33) - 64
-  local mouse = make_vector(mouse_x, mouse_y)
-  angle = vector_angle_between(positive_x, mouse)
+function _update60() -- todo: runs after _init() and before _draw() ?
+  capture_mouse()
+  norm = vector_projection(mouse, g_a, g_b)
 end
 
 function _draw()
   cls(1)
-  line(0, 0, positive_x.x, positive_x.y, 9)
-  line(0, 0, mouse_x, mouse_y, 12)
-  circ(mouse_x, mouse_y, 4, 5)
-  print(angle, 4, 4, 7)
+  line(g_a.x, g_a.y, mouse.x, mouse.y, 9)
+  line(g_a.x, g_a.y, g_b.x, g_b.y, 12)
+  line(mouse.x, mouse.y, norm.x, norm.y, 7)
+  circ(mouse.x, mouse.y, 4, 6)
+  circ(norm.x, norm.y, 4, 15)
+  print(norm.x .. ', ' .. norm.y, 4, 4, 7)
+end
+
+-->8
+
+function capture_mouse()
+  mouse = make_vector(stat(32), stat(33))
 end
 
 -->8
@@ -52,12 +56,24 @@ function vector_div(v, n)
   return make_vector(v.x / n, v.y / n)
 end
 
+function vector_add(a, b)
+  return make_vector(a.x + b.x, a.y + b.y)
+end
+
 function vector_sub(a, b)
   return make_vector(a.x - b.x, a.y - b.y)
 end
 
 function vector_angle_between(a, b)
   return acos(a:dot(b) / (a:mag() * b:mag()))
+end
+
+function vector_projection(p, a, b)
+  local ap = vector_sub(p, a)
+  local ab = vector_sub(b, a)
+  ab:normalize()
+  ab:mult(ap:dot(ab))
+  return vector_add(a, ab)
 end
 
 function make_vector(x, y)
