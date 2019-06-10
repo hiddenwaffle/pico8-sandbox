@@ -14,7 +14,7 @@ function _update60()
   mouse_x = stat(32) - 64
   mouse_y = stat(33) - 64
   local mouse = make_vector(mouse_x, mouse_y)
-  angle = angle_between(positive_x, mouse)
+  angle = vector_angle_between(positive_x, mouse)
 end
 
 function _draw()
@@ -26,14 +26,6 @@ function _draw()
 end
 
 -->8
-
-function angle_between(a, b)
-  return acos(dot(a, b) / (a:mag() * b:mag()))
-end
-
-function dot(v1, v2)
-  return v1.x * v2.x + v1.y * v2.y
-end
 
 -- From:
 -- https://www.lexaloffle.com/bbs/?pid=52433
@@ -55,6 +47,22 @@ function acos(x)
 end
 
 -->8
+
+function vector_div(v, n)
+  return make_vector(v.x / n, v.y / n)
+end
+
+function vector_sub(a, b)
+  return make_vector(a.x - b.x, a.y - b.y)
+end
+
+function vector_angle_between(a, b)
+  return acos(vector_dot(a, b) / (a:mag() * b:mag()))
+end
+
+function vector_dot(v1, v2)
+  return v1.x * v2.x + v1.y * v2.y
+end
 
 function make_vector(x, y)
   return {
