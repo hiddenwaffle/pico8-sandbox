@@ -37,7 +37,7 @@ function make_mover()
       self.acceleration:mult(0.25)
       self.velocity:add(self.acceleration)
       self.location:add(self.velocity)
-      self.velocity:limit(0.2) -- todo: does this actually do anything?
+      self.velocity:limit(2)
     end,
     display = function (self)
       circfill(self.location.x, self.location.y, 6, 11)
@@ -77,9 +77,9 @@ function make_pvector(x, y)
       self:mult(amt)
     end,
     limit = function (self, amt)
-      if (self:mag() > 5) then
+      if (self:mag() > amt) then
         self:normalize()
-        self:mult(5)
+        self:mult(amt)
       end
     end
   }

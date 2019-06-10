@@ -99,9 +99,9 @@ function make_pvector(x, y)
       self:mult(amt)
     end,
     limit = function (self, amt)
-      if (self:mag() > 5) then
+      if (self:mag() > amt) then
         self:normalize()
-        self:mult(5)
+        self:mult(amt)
       end
     end
   }
