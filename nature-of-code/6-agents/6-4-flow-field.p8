@@ -3,7 +3,7 @@ version 18
 __lua__
 
 function _init()
-  os2d_noise(rnd(0, 32767)) -- todo: does not act random?
+  os2d_noise()
   flowfield = make_flowfield(4)
   vehicles = { }
   for i = 1, 60 do
@@ -240,7 +240,7 @@ function os2d_noise(seed)
         src[i]=i
         _os2d_prm[i]=0
     end
-    srand(seed)
+    if (seed) srand(seed)
     for i=255,0,-1 do
         local r=flr(rnd(i+1))
         _os2d_prm[i]=src[r]
