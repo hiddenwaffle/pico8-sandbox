@@ -19,11 +19,11 @@ function configure_path()
   path:add_point(128 + 1, 64)
 end
 
-function _update60() -- todo: runs after _init() and before _draw() ?
+function _update60()
   if (btnp(5)) configure_path()
   for car in all(cars) do
     car:follow(path)
-    car:apply_force(move_right)
+    car:apply_force(move_right) -- todo: not sure why i could not find this in the original sketch
     car:update()
     car:borders(path)
   end
