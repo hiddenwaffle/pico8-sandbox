@@ -7,8 +7,10 @@ __lua__
 
 function _init()
   configure_path()
-  car1 = make_vehicle(make_vector(0, 64), 1, 0.025)
-  car2 = make_vehicle(make_vector(0, 64), 0.75, 0.01875)
+  cars = { }
+  for i = 1, 16 do
+    cars[i] = make_vehicle(make_vector(0, 64), 0.5 + i * 0.0925, 0.01875 + i * 0.003515625)
+  end
 end
 
 function configure_path()
@@ -21,19 +23,19 @@ end
 
 function _update60() -- todo: runs after _init() and before _draw() ?
   if (btnp(5)) configure_path()
-  car1:follow(path)
-  car2:follow(path)
-  car1:update()
-  car2:update()
-  car1:borders(path)
-  car2:borders(path)
+  for car in all(cars) do
+    car:follow(path)
+    car:update()
+    car:borders(path)
+  end
 end
 
 function _draw()
   cls(1)
   path:display()
-  car1:display()
-  car2:display()
+  for car in all(cars) do
+    car:display()
+  end
   print('press ❎ to reconfigure', 4, 4, 7)
 end
 
@@ -76,7 +78,7 @@ function make_vehicle(l, ms, mf)
     maxspeed = ms, -- 1,
     maxforce = mf, -- 0.025,
     acceleration = make_vector(0, 0),
-    velocity = make_vector(1, 0),
+    velocity = make_vector(1, 0), -- todo: original is 0, 0, but how would it start moving?
     follow = function (self, p)
       local predict = self.velocity:get()
       predict:normalize()
