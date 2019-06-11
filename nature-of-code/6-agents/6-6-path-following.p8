@@ -67,11 +67,11 @@ end
 
 function make_vehicle(l, ms, mf)
   local color = 0
-  while color != 1 do
+  while color == 0 or color == 1 do
     color = flr(rnd(16))
   end
   return {
-    color = flr(rnd(16)),
+    color = color,
     position = l:get(),
     r = 3,
     maxspeed = ms, -- 1,
