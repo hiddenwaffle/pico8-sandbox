@@ -73,7 +73,27 @@ function make_vehicle()
       return steer
     end,
     separate = function (self, vehicles) -- todo: shadows global vehicles
-      return make_vector(0, 0)
+      local desiredseparation = self.r * 4 --  todo: was 2 in the original sketch
+      local sum = make_vector(0, 0)
+      local count = 0
+      for other in all(vehicles) do
+        local d = vector_dist(self.position, other.position)
+        if d > 0 and d < desiredseparation then
+          local diff = vector_sub(self.position, other.position)
+          diff:normalize()
+          diff:mult(1 / d) -- weight by distance
+          sum:add(diff)
+          count += 1
+        end
+      end
+      if count > 0 then
+        sum:mult(1 / count)
+        sum:normalize()
+        sum:mult(self.maxspeed)
+        sum:sub(self.velocity)
+        sum:limit(self.maxforce)
+      end
+      return sum
     end,
     update = function (self)
       self.velocity:add(self.acceleration)
