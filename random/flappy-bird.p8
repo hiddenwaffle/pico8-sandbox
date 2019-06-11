@@ -82,10 +82,6 @@ function reset_left_pipe()
   add(g_pipes, moving_pipe)
 end
 
-function debug(str) -- todo: temporary
-  printh(str, 'log')
-end
-
 -->8
 
 function _draw()
@@ -104,7 +100,6 @@ function draw_bird(x, y)
 end
 
 function draw_pipes()
-  debug(g_pipes[1].gap)
   for pipe in all(g_pipes) do
     rectfill(pipe.x,             0, pipe.x + 24, pipe.gap, 3) -- top
     rectfill(pipe.x, pipe.gap + 40, pipe.x + 24,      112, 3) -- bottom
