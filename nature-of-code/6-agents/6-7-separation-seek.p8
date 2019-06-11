@@ -2,13 +2,16 @@ pico-8 cartridge // http://www.pico-8.com
 version 18
 __lua__
 
+-- based on:
+-- https://github.com/nature-of-code/noc-examples-processing/tree/master/chp06_agents/NOC_6_08_SeparationAndSeek
+-- which says 6.8 but looks like a continuation of 6.7
+
 function _init()
   configure_path()
   cars = { }
   for i = 1, 16 do
     cars[i] = make_vehicle(make_vector(0, 64), 0.5 + i * 0.0925, 0.01875 + i * 0.003515625)
   end
-  move_right = make_vector(0.01, 0)
 end
 
 function configure_path()
@@ -23,7 +26,6 @@ function _update60() -- todo: runs after _init() and before _draw() ?
   if (btnp(5)) configure_path()
   for car in all(cars) do
     car:follow(path)
-    car:apply_force(move_right)
     car:update()
     car:borders(path)
   end
