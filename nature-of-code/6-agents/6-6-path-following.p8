@@ -68,7 +68,7 @@ end
 
 function make_vehicle(l, ms, mf)
   local color = 0
-  while color != 0 do
+  while color != 1 do
     color = flr(rnd(16))
   end
   return {
