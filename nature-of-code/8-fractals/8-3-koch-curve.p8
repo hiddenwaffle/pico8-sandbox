@@ -12,6 +12,11 @@ function _init()
 end
 
 function _update60()
+  if btnp(4) then
+    for l in all(g.lines) do
+      l:wiggle()
+    end
+  end
   if btnp(5) then
     generate()
   end
@@ -22,9 +27,26 @@ function _draw()
   for l in all(g.lines) do
     l:display()
   end
+  print(#g.lines, 4, 4, 7)
+  print(stat(0), 4, 11, 7)
+  print('press 🅾️ to wiggle', 4, 18, 7)
+  print('press ❎ to generate', 4, 25, 7)
 end
 
 function generate()
+  local next = { }
+  for l in all(g.lines) do
+    local a = l:koch_a()
+    local b = l:koch_b()
+    local c = l:koch_c()
+    local d = l:koch_d()
+    local e = l:koch_e()
+    add(next, koch_line_type:new(a, b))
+    add(next, koch_line_type:new(b, c))
+    add(next, koch_line_type:new(c, d))
+    add(next, koch_line_type:new(d, e))
+  end
+  g.lines = next
 end
 
 -->8
@@ -41,8 +63,47 @@ function koch_line_type:new(a, b)
   return o
 end
 
+function koch_line_type:wiggle()
+  local vel = vector_random2d()
+  self.vstart:add(vel)
+  vel = vector_random2d()
+  self.vend:add(vel)
+end
+
 function koch_line_type:display()
   line(self.vstart.x, self.vstart.y, self.vend.x, self.vend.y, 7)
+end
+
+function koch_line_type:koch_a()
+  return self.vstart:get()
+end
+
+function koch_line_type:koch_b()
+  local v = vector_sub(self.vend, self.vstart)
+  v:div(3)
+  v:add(self.vstart)
+  return v
+end
+
+function koch_line_type:koch_c()
+  local a = self.vstart:get()
+  local v = vector_sub(self.vend, self.vstart)
+  v:div(3)
+  a:add(v)
+  v:rotate(-1 / 6) -- 60 degrees
+  a:add(v)
+  return a
+end
+
+function koch_line_type:koch_d()
+  local v = vector_sub(self.vstart, self.vend)
+  v:div(3)
+  v:add(self.vend)
+  return v
+end
+
+function koch_line_type:koch_e()
+  return self.vend:get()
 end
 
 -->8
@@ -64,6 +125,10 @@ function acos(x)
   ret -= 2 * negate * ret
   ret = negate * 3.14159265358979 + ret
   return ret / (2 * 3.14159265358979) -- map to [0, 1)
+end
+
+function vector_random2d()
+  return make_vector(rnd(2) - 1, rnd(2) - 1)
 end
 
 function vector_div(v, n)
@@ -110,6 +175,10 @@ function make_vector(x, y)
       self.x *= amt
       self.y *= amt
     end,
+    div = function (self, amt)
+      self.x /= amt
+      self.y /= amt
+    end,
     mag = function (self)
       return sqrt(self:mag_sq())
     end,
@@ -137,6 +206,11 @@ function make_vector(x, y)
     end,
     dot = function (self, v)
       return self.x * v.x + self.y * v.y
+    end,
+    rotate = function (self, theta)
+      local xtemp = self.x
+      self.x = self.x * cos(theta) - self.y * -sin(theta)
+      self.y = xtemp * -sin(theta) + self.y * cos(theta)
     end
   }
 end
