@@ -2,6 +2,8 @@ pico-8 cartridge // http://www.pico-8.com
 version 18
 __lua__
 
+#include shared.p8
+
 function _init()
   ball = {
     r = 6,
@@ -33,8 +35,8 @@ end
 
 function _draw()
   cls(1)
-  line(0, 32, 128, 32, 0)
-  line(0, 96, 128, 96, 0)
-  circfill(ball.x, ball.y, ball.r, 12)
+  line(0, 32, 128, 32, get_black())
+  line(0, 96, 128, 96, get_black())
+  circfill(ball.x, ball.y, ball.r, get_cerulean())
   circ(ball.x, ball.y, ball.r, 7)
 end
