@@ -2,6 +2,8 @@ pico-8 cartridge // http://www.pico-8.com
 version 18
 __lua__
 
+-- iteration 1 makes a circle... does that mean anything?
+
 -- based on stuff i learned from professor holly krieger's talk at:
 -- https://www.youtube.com/watch?v=NGMRB4O922I
 -- and how to multiply complex numbers:
