@@ -39,8 +39,8 @@ end
 function make_attractor()
   return {
     location = make_pvector(64, 64),
-    mass = 0.5, -- 20,
-    g = 0.02, --1,
+    mass = 5, -- 20,
+    g = 0.5, --1,
     drag_offset = make_pvector(0, 0),
     attract = function (self, m)
       -- direction of the force

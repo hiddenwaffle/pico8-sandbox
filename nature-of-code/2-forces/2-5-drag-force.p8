@@ -39,7 +39,7 @@ function _update60()
     if m.location.y >= water_line then
       local drag = m.velocity:get()
       drag:normalize()
-      local c = -0.0005
+      local c = -0.1
       local speed_sq = m.velocity:mag_sq() -- "speed squared"
       drag:mult(c * speed_sq)
       m:apply_force(drag)
