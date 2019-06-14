@@ -2,7 +2,8 @@ pico-8 cartridge // http://www.pico-8.com
 version 18
 __lua__
 
-#include vector.p8
+#include lib/math.p8:0
+#include lib/vector.p8:0
 
 g = { }
 

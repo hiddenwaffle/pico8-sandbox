@@ -2,14 +2,17 @@ pico-8 cartridge // http://www.pico-8.com
 version 18
 __lua__
 
+assert(lib_math_defined__)
+lib_vector_defined_ = true
+
 function vector_new(x, y)
   return {
-    x = x,
-    y = y
+    x = x or 0,
+    y = y or 0
   }
 end
 
-function vector_random2d_to_ref(ref)
+function vector_random2d_to_ref(ref) -- note: not normalized
   ref.x = rnd(2) - 1
   ref.y = rnd(2) - 1
 end
@@ -45,23 +48,12 @@ function vector_projection(p, a, b)
   return vector_add(a, ab)
 end
 
--- From:
--- https://www.lexaloffle.com/bbs/?pid=52433
--- http://developer.download.nvidia.com/cg/acos.html
-function acos(x)
-  local negate = (x < 0 and 1.0 or 0.0)
-  x = abs(x)
-  local ret = -0.0187293
-  ret *= x
-  ret += 0.0742610
-  ret *= x
-  ret -= 0.2121144
-  ret *= x
-  ret += 1.5707288
-  ret *= sqrt(1.0 - x)
-  ret -= 2 * negate * ret
-  ret = negate * 3.14159265358979 + ret
-  return ret / (2 * 3.14159265358979) -- map to [0, 1)
+function vector_magnitude(v)
+  return sqrt(vector_magnitude_sq(v))
+end
+
+function vector_magnitude_sq(v)
+  return v.x ^ 2 + v.y ^ 2
 end
 
 -- function make_vector(x, y)
@@ -117,3 +109,6 @@ end
 --     end
 --   }
 -- end
+
+-->8
+-- todo: unit tests
