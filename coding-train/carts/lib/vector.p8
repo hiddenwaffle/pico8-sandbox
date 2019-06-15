@@ -45,12 +45,19 @@ function vector_dist(a, b)
   return sqrt((b.x - a.x) ^  2 + (b.y - a.y) ^ 2)
 end
 
-function vector_projection(p, a, b)
-  local ap = vector_sub(p, a)
-  local ab = vector_sub(b, a)
-  ab:normalize()
-  ab:mult(ap:dot(ab))
-  return vector_add(a, ab)
+-- function vector_projection(p, a, b)
+--   local ap = vector_sub(p, a)
+--   local ab = vector_sub(b, a)
+--   ab:normalize()
+--   ab:mult(ap:dot(ab))
+--   return vector_add(a, ab)
+-- end
+
+function vector_normalize_to_ref(v, ref)
+  local m = vector_magnitude(v)
+  if (m == 0) m = 0.0001 -- bandaid
+  ref.x /= m
+  ref.y /= m
 end
 
 function vector_magnitude(v)
