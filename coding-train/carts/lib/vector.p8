@@ -17,6 +17,11 @@ function vector_random2d_to_ref(ref) -- note: not normalized
   ref.y = rnd(2) - 1
 end
 
+function vector_mult_to_ref(v, n, ref)
+  ref.x = v.x * n
+  ref.y = v.y * n
+end
+
 function vector_div_to_ref(v, n, ref)
   ref.x = v.x / n
   ref.y = v.y / n
