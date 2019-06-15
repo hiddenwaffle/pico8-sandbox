@@ -14,22 +14,52 @@ function _init()
   g.count = 1
   g.target = vector_type:new(64, 16)
   g.obstacles = {
+    { -- hat bottom
+      x = 64 - 8,
+      y = 16 + 8,
+      w = 16,
+      h = 4
+    },
+    { -- hat left
+      x = 64 - 12,
+      y = 16 - 8,
+      w = 4,
+      h = 20
+    },
+    { -- hat right
+      x = 64 + 8,
+      y = 16 - 8,
+      w = 4,
+      h = 20
+    },
     { -- middle
       x = 32,
       y = 56,
       w = 64,
       h = 4
     },
-    { -- left
-      x = 12,
+    { -- left top
+      x = 8,
       y = 32,
       w = 32,
       h = 4
     },
-    { -- right
-      x = 82,
+    { -- right top
+      x = 86,
       y = 32,
       w = 32,
+      h = 4
+    },
+    { -- left bottom
+      x = 4,
+      y = 80,
+      w = 40,
+      h = 4
+    },
+    { -- right bottom
+      x = 80,
+      y = 80,
+      w = 40,
       h = 4
     }
   }
@@ -165,7 +195,7 @@ end
 
 function dna_type:mutation()
   for gene in all(genes) do
-    if rnd(1) < 0.02 then
+    if rnd(1) < 0.01 then
       gene = self:_random()
       gene:set_mag(g.max_force)
     end
@@ -222,6 +252,12 @@ function rocket_type:update()
   end
   self:apply_force(self.dna.genes[g.count])
   if not self.completed and not self.crashed then
+    if self.pos.x < 0 or self.pos.x > 127 then
+      self.vel.x *= -1
+    end
+    if self.pos.y < 0 or self.pos.y > 127 then
+      self.vel.y *= -1
+    end
     self.vel:add(self.acc)
     self.pos:add(self.vel)
     self.acc:mult(0)
@@ -230,9 +266,9 @@ end
 
 function rocket_type:calc_fitness()
   if self.completed then
-    self.fitness = 1
+    self.fitness = 1 -- todo: what number should this really be?
   elseif self.crashed then
-    self.fitness /= 10
+    self.fitness /= 10 -- todo: what number should this really be?
   else
     local d = dist(self.pos.x, self.pos.y, g.target.x, g.target.y)
     if (d == 0) d = 0.001
