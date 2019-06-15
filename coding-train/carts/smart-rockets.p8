@@ -174,7 +174,7 @@ function dna_type:new(genes)
   else
     o.genes = { }
     for i = 1, g.lifespan do
-      o.genes[i] = self:_random()
+      o.genes[i] = self._random()
     end
   end
   setmetatable(o, self)
@@ -198,7 +198,7 @@ end
 function dna_type:mutation()
   for gene in all(genes) do
     if rnd(1) < 0.01 then
-      gene = self:_random()
+      gene = self._random()
       gene:set_mag(g.max_force)
     end
   end
