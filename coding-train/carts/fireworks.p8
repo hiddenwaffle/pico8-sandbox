@@ -6,7 +6,7 @@ __lua__
 -- https://www.youtube.com/watch?v=CKeyIbT3vXI
 
 #include lib/math.p8:0
-#include lib/vector.p8:0
+#include lib/vector-procedural.p8:0
 
 g = { }
 

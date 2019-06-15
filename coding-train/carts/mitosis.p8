@@ -3,7 +3,7 @@ version 18
 __lua__
 
 #include lib/math.p8:0
-#include lib/vector.p8:0
+#include lib/vector-procedural.p8:0
 
 g = { }
 
