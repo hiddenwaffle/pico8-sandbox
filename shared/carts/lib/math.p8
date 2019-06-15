@@ -23,5 +23,16 @@ function acos(x)
   return ret / (2 * 3.14159265358979) -- map to [0, 1)
 end
 
+function map_project(val, s_start, s_end, d_start, d_end)
+  return ((val - s_start) / (s_end - s_start)) * (d_end - d_start) + d_start
+end
+-- cls()
+-- print('test ' .. map_project(96, 0, 127, -2, 2))
+-- assert(false)
+-- ((96 - 0)  / (127 - 0) * (2 - -2) + -2
+-- (96 / 127) * (2 + 2) - 2
+--0.7559055118 * 4 - 2
+-- 1.0236220472
+
 -->8
 -- todo: unit tests
