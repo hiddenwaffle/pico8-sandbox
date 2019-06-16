@@ -4,7 +4,7 @@ Stash for random PICO-8 stuff
 
 ## Notes
 
-Using VS Code, ensure settings:
+Using VS Code, add these settings:
 ```
 "pico8vscodeeditor.pico8fullpath": "/Applications/PICO-8.app/Contents/MacOS/pico8",
 "pico8vscodeeditor.pico8additionalParameters": "-width 1000 -height 1000 -volume 32 -home '<project directory>'"
