@@ -61,6 +61,12 @@ function vector2d_type:copy()
   return vector2d_type:new(self.x, self.y)
 end
 
+function vector2d_type:copy_to_ref(ref)
+  ref.x = self.x
+  ref.y = self.y
+  -- todo: return self or ref here?
+end
+
 function vector2d_type.random_vector()
   local v = vector2d_type:new(rnd(2) - 1, rnd(2) - 1) -- good enough
   v:normalize()

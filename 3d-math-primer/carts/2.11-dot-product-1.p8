@@ -81,7 +81,7 @@ end
 function rnd_32_64()
   local sign = rnd(1)
   if sign < 0.5 then
-    return 0 - flr(rnd(33))
+    return -64 + flr(rnd(33))
   else
     return 64 - flr(rnd(33))
   end
