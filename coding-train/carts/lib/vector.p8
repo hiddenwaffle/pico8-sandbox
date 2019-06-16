@@ -71,6 +71,6 @@ function vector_type.dist_16bit(v1, v2)
   local a = sqrt((x2 - x1) ^ 2 + (y2 - y1) ^ 2)
   return a / 0.001
 end
-local v1 = vector_type:new(0, 0)
-local v2 = vector_type:new(3000, 4000)
-print(vector_type.dist_16bit(v1, v2))
+-- local v1 = vector_type:new(0, 0)
+-- local v2 = vector_type:new(3000, 4000)
+-- print(vector_type.dist_16bit(v1, v2))
