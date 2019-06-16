@@ -89,3 +89,30 @@ end
 function vector2d_type.dot(v1, v2)
   return v1.x * v2.x + v1.y * v2.y
 end
+
+-- arccos of the dot product over the product of the magnitudes
+function vector2d_type.angle_between(v1, v2)
+  return vector2d_type.acos(
+    vector2d_type.dot(g.v1, g.v2)
+    /
+    (v1:magnitude() * v2:magnitude()))
+end
+
+-- From:
+-- https://www.lexaloffle.com/bbs/?pid=52433
+-- http://developer.download.nvidia.com/cg/acos.html
+function vector2d_type.acos(x)
+  local negate = (x < 0 and 1.0 or 0.0)
+  x = abs(x)
+  local ret = -0.0187293
+  ret *= x
+  ret += 0.0742610
+  ret *= x
+  ret -= 0.2121144
+  ret *= x
+  ret += 1.5707288
+  ret *= sqrt(1.0 - x)
+  ret -= 2 * negate * ret
+  ret = negate * 3.14159265358979 + ret
+  return ret / (2 * 3.14159265358979) -- map to [0, 1)
+end
