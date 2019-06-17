@@ -28,3 +28,5 @@ end
 -- local result = vector3d_type:new()
 -- vector3d_type.cross_to_ref(v1, v2, result)
 -- print(result.x .. ', ' .. result.y .. ', ' .. result.z)
+-- vector3d_type.cross_to_ref(v2, v1, result)
+-- print(result.x .. ', ' .. result.y .. ', ' .. result.z)
