@@ -36,7 +36,7 @@ function vector2d_type:mult(amt)
 end
 
 function vector2d_type:magnitude_sq()
-  return self.x ^ 2 + self.y ^ 2
+  return self.x * self.x + self.y * self.y
 end
 
 function vector2d_type:magnitude()
@@ -79,7 +79,7 @@ function vector2d_type.dist_16bit(v1, v2)
   local x2 = v2.x * 0.001
   local y1 = v1.y * 0.001
   local y2 = v2.y * 0.001
-  local a = sqrt((x2 - x1) ^ 2 + (y2 - y1) ^ 2)
+  local a = sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1))
   return a / 0.001
 end
 -- local v1 = vector2d_type:new(0, 0)
