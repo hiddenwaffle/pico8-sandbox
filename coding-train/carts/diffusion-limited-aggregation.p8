@@ -26,7 +26,7 @@ function _init()
   for i = 1, g.max_walkers do
     add(g.walkers, walker_type:new())
   end
-  g.iterations = 1000
+  g.iterations = 200
 end
 
 function _update60()
