@@ -5,14 +5,114 @@ __lua__
 g = { }
 
 function _init()
+  g.circles = { }
+  for i = 1, 1 do
+    add(g.circles, circle_type:new(64, 64))
+  end
 end
 
 function _update60()
+  local total = 2 -- add multiple circles at a time
+  local count = 0
+  local attempts = 0
+  while count < total do
+    local new_c = new_circle()
+    if new_c then
+      add(g.circles, new_c)
+      count += 1
+    end
+    attempts += 1
+    if attempts > 100 then
+      assert(false) -- no more space left for circles
+    end
+  end
+  for c in all(g.circles) do
+    if c:edges() then
+      c.growing = false
+    else
+      for other in all(g.circles) do
+        if c != other then
+          local d = dist_16bit(c.x, c.y, other.x, other.y)
+          if d < c.r + other.r then
+            c.growing = false
+            break
+          end
+        end
+      end
+    end
+    c:grow()
+  end
 end
 
 function _draw()
   cls(1)
-  sspr(8, 0, 64, 64, 2, 2, 128, 128)
+  -- sspr(8, 0, 64, 64, 2, 2, 128, 128)
+  for circle in all(g.circles) do
+    circle:show()
+  end
+end
+
+-->8
+
+circle_type =  { }
+
+function circle_type:new(x, y)
+  local o = {
+    x = x,
+    y = y,
+    r = 1,
+    growing = true
+  }
+  setmetatable(o, self)
+  self.__index = self
+  return o
+end
+
+function circle_type:grow()
+  if self.growing then
+    self.r += 1
+  end
+end
+
+function circle_type:edges()
+  return self.x + self.r >= 127 or
+         self.x - self.r <    0 or
+         self.y + self.r >= 127 or
+         self.y - self.r <    0
+end
+
+function circle_type:show()
+  circ(self.x, self.y, self.r, 7)
+end
+
+-->8
+
+function new_circle()
+  local x = flr(rnd(128))
+  local y = flr(rnd(128))
+  local valid = true
+  for c in all(g.circles) do
+    local d = dist_16bit(x, y, c.x, c.y)
+    if d < c.r then
+      valid = false
+      break
+    end
+  end
+  if valid then
+    return circle_type:new(x, y)
+  else
+    return nil
+  end
+end
+
+-- taken from vector2d lib
+function dist_16bit(x1, y1, x2, y2)
+  local x1 *= 0.001
+  local x2 *= 0.001
+  local y1 *= 0.001
+  local y2 *= 0.001
+  local a = sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1))
+  return a / 0.001
 end
 
 __gfx__
