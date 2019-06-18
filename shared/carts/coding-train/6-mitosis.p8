@@ -2,6 +2,8 @@ pico-8 cartridge // http://www.pico-8.com
 version 18
 __lua__
 
+-- coding challenge #6
+
 #include lib/math.p8:0
 #include lib/vector-procedural.p8:0
 
