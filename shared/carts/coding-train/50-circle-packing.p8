@@ -100,7 +100,8 @@ function circle_type:edges()
 end
 
 function circle_type:show()
-  circ(self.x, self.y, self.r, 7)
+  circfill(self.x, self.y, self.r, 3)
+  circ(self.x, self.y, self.r, 11)
 end
 
 -->8
