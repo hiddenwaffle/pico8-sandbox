@@ -2,6 +2,8 @@ pico-8 cartridge // http://www.pico-8.com
 version 18
 __lua__
 
+lib_table_defined_ = true
+
 function table_splice(a, start, count)
   count = count or (#a - start + 1)
   local subset = { }
@@ -41,4 +43,12 @@ function table_tostring(any)
     str = str .. tostring(k) .. ' -> ' .. tostring(v) .. ' '
   end
   return str .. '}'
+end
+
+function table_shallow_index_copy(src)
+  local dest = { }
+  for k, v in pairs(src) do
+    dest[k] = v
+  end
+  return dest
 end
