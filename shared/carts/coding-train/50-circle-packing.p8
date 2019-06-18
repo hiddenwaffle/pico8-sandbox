@@ -2,6 +2,9 @@ pico-8 cartridge // http://www.pico-8.com
 version 18
 __lua__
 
+-- coding challenge #50.1
+-- https://www.youtube.com/watch?v=QHEQuoIKgNE
+
 #include lib/vector2d.p8:0
 
 g = { }
