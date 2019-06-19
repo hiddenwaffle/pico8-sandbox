@@ -207,9 +207,11 @@ end
 -->8
 
 function heuristic(a, b)
-  local d = dist_16bit(a.i, a.j, b.i, b.j) -- "euclidian"
-  -- local d = abs(a.i - b.i) + abs(a.j - b.j) -- "manhattan"
-  return d
+  if g.diagonals_on then
+    return dist_16bit(a.i, a.j, b.i, b.j) -- "euclidian"
+  else
+    return abs(a.i - b.i) + abs(a.j - b.j) -- "manhattan"
+  end
 end
 
 -- taken from vector2d lib
