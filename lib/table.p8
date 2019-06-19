@@ -4,6 +4,17 @@ __lua__
 
 lib_table_defined_ = true
 
+function table_contains(a, target)
+  local found = false
+  function check(e)
+    if target == e then
+      found = true
+    end
+  end
+  foreach(a, check)
+  return found
+end
+
 function table_splice(a, start, count)
   count = count or (#a - start + 1)
   local subset = { }
