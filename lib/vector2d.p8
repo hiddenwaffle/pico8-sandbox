@@ -78,6 +78,15 @@ function vector2d_type:copy_to_ref(ref)
   -- todo: return self or ref here?
 end
 
+function vector2d_type.lerp(v1, v2, amt)
+  local d = v2:copy():sub(v1):mult(amt)
+  return v1:copy():add(d)
+end
+-- local v1 = vector2d_type:new(10, 10)
+-- local v2 = vector2d_type:new(5, 0)
+-- local v3 = vector2d_type.lerp(v1, v2, 0.5)
+-- print(v3.x .. ', ' .. v3.y)
+
 function vector2d_type.random_vector()
   local v = vector2d_type:new(rnd(2) - 1, rnd(2) - 1) -- good enough
   v:normalize()
