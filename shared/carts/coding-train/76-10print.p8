@@ -5,6 +5,10 @@ __lua__
 -- coding challenge #76
 -- https://www.youtube.com/watch?v=bEyTZ5ZZxZs
 
+-- my goal here was to make the one line look as much
+-- like the original by faking the underlying functions
+-- into doing what the c64 did.
+
 function _init()
   cls(1)
   ::ten:: _print(chrs(205.5 + rnd(1))); goto ten
