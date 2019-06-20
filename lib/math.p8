@@ -2,7 +2,16 @@ pico-8 cartridge // http://www.pico-8.com
 version 18
 __lua__
 
--- lib_math_defined__ = true
+lib_math_defined__ = true
+
+-- from the processing framework (processing.org))
+function math_map(value, istart, istop, ostart, ostop)
+  return ostart + (ostop - ostart) * ((value - istart) / (istop - istart))
+end
+-- for i = 1, 10 do
+--   local result = math_map(i, 1, 10, -5, 5)
+--   print(result)
+-- end
 
 -- -- From:
 -- -- https://www.lexaloffle.com/bbs/?pid=52433
