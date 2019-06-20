@@ -3,7 +3,7 @@ version 18
 __lua__
 
 -- coding challenge #64.3
--- https://www.youtube.com/watch?v=RTc6i-7N3ms
+-- https://www.youtube.com/watch?v=10st01Z0jxc
 
 #include lib/vector2d.p8:0
 #include lib/os2d.p8:0
@@ -12,45 +12,53 @@ __lua__
 g = { }
 
 function _init()
-  local segments = 10
-  local length = 10
-  g.tentacle = { }
-  g.tentacle[1] = segment_type:new(64, 64, length)
-  for i = 2, segments do
-    g.tentacle[i] = segment_type:new_from_parent(g.tentacle[i - 1], length, 0)
-  end
   g.mouse = { x = 64, y = 44}
-  g.base = vector2d_type:new(64, 127)
+  g.tentacles = { }
+  local da = 1 / 5 -- denominator is # of tentacles
+  local color = 7
+  for a = 0, 1, da do
+    local x = 64 + cos(a) * 40 * 1.5
+    local y = 64 + sin(a) * 40
+    add(g.tentacles, tentacle_type:new(x, y, color))
+    color += 1
+  end
+  g.pos = vector2d_type:new(0, 0)
+  g.vel = vector2d_type:new(0.666, 1)
+  g.gravity = vector2d_type:new(0, 0.2)
 end
 
 function _update60()
   update_mouse()
-  local total = #g.tentacle
-  local finish = g.tentacle[total]
-  finish:follow(g.mouse.x, g.mouse.y)
-  finish:update()
-  for i = total - 1, 1, -1 do
-    g.tentacle[i]:follow_2(g.tentacle[i + 1])
-    g.tentacle[i]:update()
+  for tentacle in all(g.tentacles) do
+    tentacle:update()
   end
-  g.tentacle[1]:set_a(g.base)
-  for i = 2, total do
-    g.tentacle[i]:set_a(g.tentacle[i - 1].b)
+  g.pos:add(g.vel)
+  g.vel:add(g.gravity)
+  if g.pos.x > 127 or g.pos.x < 0 then
+    g.vel.x *= -1
   end
+  if (g.pos.x > 127) g.pos.x = 127
+  if (g.pos.x < 0) g.pos.x = 0
+  if g.pos.y > 127 or g.pos.y < 0 then
+    g.vel.y *= -1
+  end
+  if (g.pos.y > 127) g.pos.y = 127
+  if (g.pos.y < 0) g.pos.y = 0
 end
 
 function _draw()
   cls(1)
-  for seg in all(g.tentacle) do
-    seg:show()
+  for tentacle in all(g.tentacles) do
+    tentacle:show()
   end
+  circ(g.pos.x, g.pos.y, 5, 14)
   draw_mouse()
 end
 
 -->8
 
 function update_mouse()
-  local speed = 1
+  local speed = 2
   if (btn(0)) g.mouse.x -= speed
   if (btn(1)) g.mouse.x += speed
   if (btn(2)) g.mouse.y -= speed
@@ -65,6 +73,48 @@ function draw_mouse()
     pset(x, y - i, 5 + i)
     pset(x - i, y, 5 + i)
     pset(x + i, y, 5 + i)
+  end
+end
+
+-->8
+
+tentacle_type = { }
+
+function tentacle_type:new(x, y, color)
+  local o = {
+    segments = { },
+    base = vector2d_type:new(x, y),
+    len = 5,
+    color = color
+  }
+  local total = 10
+  o.segments[1] = segment_type:new(64, 64, o.len)
+  for i = 2, total do
+    o.segments[i] = segment_type:new_from_parent(o.segments[i - 1], o.len, i)
+  end
+  setmetatable(o, self)
+  self.__index = self
+  return o
+end
+
+function tentacle_type:update()
+  local total = #self.segments
+  local finish = self.segments[total]
+  finish:follow(g.pos.x, g.pos.y) -- finish:follow(g.mouse.x, g.mouse.y)
+  finish:update()
+  for i = total - 1, 1, -1 do
+    self.segments[i]:follow_2(self.segments[i + 1])
+    self.segments[i]:update()
+  end
+  self.segments[1]:set_a(self.base)
+  for i = 2, total do
+    self.segments[i]:set_a(self.segments[i - 1].b)
+  end
+end
+
+function tentacle_type:show()
+  for seg in all(self.segments) do
+    seg:show(self.color)
   end
 end
 
@@ -121,6 +171,6 @@ function segment_type:update()
   self:calculate_b()
 end
 
-function segment_type:show()
-  line(self.a.x, self.a.y, self.b.x, self.b.y, 7)
+function segment_type:show(color)
+  line(self.a.x, self.a.y, self.b.x, self.b.y, color)
 end
