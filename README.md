@@ -20,3 +20,4 @@ Underneath the home path, PICO-8 will create its directory structure (i.e., back
 ## TODO
 
 - 2048 challenge
+- Flappy Bird coding challenge #38 I think, then #100 to program the AI for it
