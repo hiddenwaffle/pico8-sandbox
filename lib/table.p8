@@ -51,7 +51,7 @@ function table_tostring(any)
   assert(type(any) == 'table')
   local str = '{ '
   for k, v in pairs(any) do
-    str = str .. tostring(k) .. ' -> ' .. tostring(v) .. ' '
+    str = str .. table_tostring(k) .. ' -> ' .. table_tostring(v) .. ' '
   end
   return str .. '}'
 end
