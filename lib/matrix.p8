@@ -25,16 +25,6 @@ function matrix_type:new(rows, cols)
   return o
 end
 
-function matrix_type:transpose()
-  local result = matrix_type:new(self.cols, self.rows)
-  for i = 1, self.rows do
-    for j = 1, self.cols do
-      result.data[j][i] = self.data[i][j]
-    end
-  end
-  return result
-end
-
 -- multiply matrix by a scalar
 function matrix_type:scale(other)
   if type(other) == 'number' then
@@ -79,6 +69,27 @@ function matrix_type:add(other)
   end
 end
 
+-- either a scalar or a matrix of the same size
+function matrix_type:mult_by(other)
+  if type(other) == 'number' then
+    for i = 1, self.rows do
+      for j = 1, self.cols do
+        self.data[i][j] *= other
+      end
+    end
+  elseif getmetatable(other) == matrix_type then
+    assert(self.rows == other.rows and
+           self.cols == other.cols)
+    for i = 1, self.rows do
+      for j = 1, self.cols do
+        self.data[i][j] *= other.data[i][j]
+      end
+    end
+  else
+    assert(false) -- cannot multiply given element
+  end
+end
+
 function matrix_type:randomize()
   for i = 1, self.rows do
     for j = 1, self.cols do
@@ -108,6 +119,28 @@ function matrix_type:totable()
   return arr
 end
 
+function matrix_type.transpose(m)
+  local result = matrix_type:new(m.cols, m.rows)
+  for i = 1, m.rows do
+    for j = 1, m.cols do
+      result.data[j][i] = m.data[i][j]
+    end
+  end
+  return result
+end
+
+-- apply a function to every element of the matrix
+function matrix_type.map_this(m, fn)
+  local result = matrix_type:new(m.rows, m.cols)
+  for i = 1, m.rows do
+    for j = 1, m.cols do
+      local val = m.data[i][j]
+      result.data[i][j] = fn(val, i, j)
+    end
+  end
+  return result
+end
+
 -- this is different from scale() that takes a scalar
 function matrix_type.mult(a, b)
   if getmetatable(a) != matrix_type or
@@ -126,6 +159,17 @@ function matrix_type.mult(a, b)
     end
   end
   return m
+end
+
+function matrix_type.subtract(a, b)
+  assert(a.rows == b.rows and a.cols == b.cols)
+  local result = matrix_type:new(a.rows, a.cols)
+  for i = 1, a.rows do
+    for j = 1, a.cols do
+      result.data[i][j] = a.data[i][j] - b.data[i][j]
+    end
+  end
+  return result
 end
 
 function matrix_type.from_table(arr)
