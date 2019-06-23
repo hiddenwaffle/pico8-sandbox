@@ -2,8 +2,8 @@ pico-8 cartridge // http://www.pico-8.com
 version 18
 __lua__
 
--- 3.3 linear regression with ordinary least squares part 2
--- https://www.youtube.com/watch?v=_cXuvTQl090
+-- 3.4 linear regression with gradient descent
+-- https://www.youtube.com/watch?v=L-Lsfu4ab74
 
 #include lib/vector2d.p8:0
 #include lib/math.p8:0
