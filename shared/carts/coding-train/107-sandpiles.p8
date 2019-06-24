@@ -24,14 +24,16 @@ function _init()
     end
   end
   ---
-  g.sandpiles[64][64] = 32767
+  g.sandpiles[64][64] = 1000
+  g.iteration = 0
 end
 
 function _update60()
   for i = 1, 100 do
     topple()
   end
-  g.sandpiles[64][64] += 1000
+  g.sandpiles[64][64] = 1000 -- neverending sand
+  g.iteration += 1
 end
 
 function _draw()
@@ -42,7 +44,7 @@ function _draw()
       if num == 0 then
         color = 0
       elseif num == 1 then
-        color = 14
+        color = 9
       elseif num == 2 then
         color = 12
       elseif num == 3 then
@@ -54,6 +56,8 @@ function _draw()
     end
   end
   print(stat(1), 4, 4, 11)
+  print(g.iteration, 4, 11, 11)
+  print(t(), 4, 18, 10)
 end
 
 -->8
@@ -73,7 +77,7 @@ function topple()
         if (x + 1 < 128) g.nextpiles[x + 1][y] += 1
         if (x - 1 >   0) g.nextpiles[x - 1][y] += 1
         if (y + 1 < 128) g.nextpiles[x][y + 1] += 1
-        if (x - 1 >   0) g.nextpiles[x][y - 1] += 1
+        if (y - 1 >   0) g.nextpiles[x][y - 1] += 1
       end
     end
   end
