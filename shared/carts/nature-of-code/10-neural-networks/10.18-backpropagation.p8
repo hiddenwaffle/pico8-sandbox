@@ -32,11 +32,15 @@ function _init()
   }
   local nn = neural_network_type:new(2, 2, 1)
   local iterations = 32767
-  for current_iteration = 1, iterations do
-    local index = flr(rnd(4)) + 1
-    local data = training_data[index]
-    nn:train(data.inputs, data.targets)
-    if (current_iteration % 1000 == 0) print(current_iteration .. ' / ' .. iterations)
+  for outer_i = 1, 100 do
+    for current_iteration = 1, iterations do
+      local index = flr(rnd(4)) + 1
+      local data = training_data[index]
+      nn:train(data.inputs, data.targets)
+      if current_iteration % 1000 == 0 then
+        print(outer_i .. ' / ' .. 100 .. ' and ' .. current_iteration .. ' / ' .. iterations)
+      end
+    end
   end
   foreach(nn:feedforward({1, 0}), print) -- 1
   foreach(nn:feedforward({0, 1}), print) -- 1
