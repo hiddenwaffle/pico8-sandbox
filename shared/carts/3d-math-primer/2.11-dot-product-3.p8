@@ -47,9 +47,12 @@ function recalculate_dot()
   -- i.e. a but with the dot product as the magnitude
   g.projection.x = g.v1.x
   g.projection.y = g.v1.y
-  -- calculate cosine and angle
-  g.cosine = g.dot_product / (g.v1:magnitude() * g.v2:magnitude())
-  g.angle = vector2d_type.acos(g.cosine)
+  -- calculate cosine and angle (old way, deprecated)
+  -- g.cosine = g.dot_product / (g.v1:magnitude() * g.v2:magnitude())
+  -- g.angle = vector2d_type.acos(g.cosine)
+  -- use angle_between instead (new way)
+  g.angle = vector2d_type.angle_between(g.v1, g.v2)
+  g.cosine = cos(g.angle) -- not really necessary anymore
   -- see vector2d_type.angle_between() for library implementation
   -- of the above two lines
 end
