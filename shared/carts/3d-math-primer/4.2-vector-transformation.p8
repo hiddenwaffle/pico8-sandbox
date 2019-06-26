@@ -6,6 +6,14 @@ __lua__
 -- didn't use the vector library, for some reason
 -- using linear interpolation in lieu of real transformations
 
+-- "the rows of a square matrix can be interpreted as the basis vectors of a coordinate space"
+-- the first example this demo shows uses the matrix:
+--
+-- |  2   1  |
+-- | -1   2  |
+--
+-- where the top row is p and the bottom row is p
+
 #include lib/math.p8:0
 
 local width = 128
