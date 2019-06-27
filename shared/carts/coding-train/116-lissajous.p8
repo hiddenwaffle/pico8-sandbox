@@ -23,23 +23,13 @@ function _init()
 end
 
 function _update60()
-  if (g.done) return
-  g.angle += 0.02 -- needs to be fast to not go out of mem
+  g.angle += 0.01 -- needs to be fast to not go out of mem
   if (g.angle > 1) then
-    for row = 1, g.rows do
-      for col = 1, g.cols do
-        g.curves[row][col]:reset()
-      end
-    end
     g.done = true
   end
 end
 
 function _draw()
-  if (g.done) then
-    print('done', 4, 11, 9)
-    return
-  end
   local r = g.w - 9
   cls()
   for i = 0, g.cols - 1 do
@@ -68,9 +58,12 @@ function _draw()
   end
   for row = 1, g.rows do
     for col = 1, g.cols do
-      g.curves[row][col]:add_point()
+      if (not g.done) g.curves[row][col]:add_point()
       g.curves[row][col]:show()
     end
+  end
+  if (g.done) then
+    print('done', 4, 11, 9)
   end
   print(stat(0), 4, 4, 10)
 end
