@@ -8,7 +8,7 @@ __lua__
 -- coding challenge #92
 -- https://www.youtube.com/watch?v=188B6k_F9jU
 
-#include lib/matrix.p8:0
+#include lib/nn-matrix.p8:0
 #include lib/neural-network.p8:0
 
 g = { }

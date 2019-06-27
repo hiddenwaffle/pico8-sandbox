@@ -5,7 +5,7 @@ __lua__
 -- based on:
 -- https://github.com/CodingTrain/website/tree/master/CodingChallenges/CC_092_xor/P5/libraries
 
-#include lib/matrix.p8:0
+#include lib/nn-matrix.p8:0
 #include lib/neural-network.p8:0
 
 g = { }
