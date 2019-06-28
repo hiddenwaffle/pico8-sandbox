@@ -2,6 +2,8 @@ pico-8 cartridge // http://www.pico-8.com
 version 18
 __lua__
 
+-- note: this was the first cart made for ch 4, so it does not use the matrix lib
+
 -- figure 4.2 animation of a basis vector
 -- didn't use the vector library, for some reason
 -- using linear interpolation in lieu of real transformations
