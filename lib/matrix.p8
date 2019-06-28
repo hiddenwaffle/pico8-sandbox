@@ -80,7 +80,6 @@ function matrix_type:to_str()
   return str
 end
 
-
 function matrix_type:transpose()
   local m = matrix_type:new(self.cols, self.rows)
   self:transpose_to_ref(m)

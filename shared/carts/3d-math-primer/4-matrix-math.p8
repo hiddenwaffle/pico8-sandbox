@@ -10,6 +10,16 @@ g = { }
 
 function _init()
   cls()
+  page1_init()
+  page2_init()
+  page3_init()
+  page4_init()
+  -- visualization page starts at 1
+  g.page = 1 -- todo: ensure that this is set to 1
+  g.done = false
+end
+
+function page1_init()
   -- square matrix
   g.sm = matrix_type.from_table{
     { 1, 2, 3 },
@@ -27,9 +37,9 @@ function _init()
   -- 1x3 transposed to 3x1
   g.m1x3t = g.m1x3:transpose()
   -- 2x3 matrix
-  -- g.m2x3 = matrix_type:new(2, 3)
-  -- g.m2x3[1][1] = 1 ; g.m2x3[1][2] = 2 ; g.m2x3[1][3] = 3
-  -- g.m2x3[2][1] = 4 ; g.m2x3[2][2] = 5 ; g.m2x3[2][3] = 6
+end
+
+function page2_init()
   g.m2x3 = matrix_type.from_table{
     { 1, 2, 3 },
     { 4, 5, 6 }}
@@ -43,6 +53,9 @@ function _init()
     { 5, 6 }}
   -- product of 2x3 times 3x2 matrices
   g.m2x2 = g.m2x3:multiply(g.m3x2)
+end
+
+function page3_init()
   -- vector2
   g.v2 = vector2_type:new(5, 6)
   g.m2x2_2 = matrix_type.from_table{
@@ -58,9 +71,22 @@ function _init()
     { 10, 11, 12 }}
   g.v3_2 = vector3_type:new()
   g.v3:transform_to_ref(g.m3x3, g.v3_2)
-  -- visualization page starts at 1
-  g.page = 3 -- todo: set back to 1
-  g.done = false
+end
+
+function page4_init()
+  -- basis vectors
+  g.vi = vector3_type:new(1, 0, 0)
+  g.vj = vector3_type:new(0, 1, 0)
+  g.vk = vector3_type:new(0, 0, 1)
+  -- matrix to test with
+  g.m3x3_2 = matrix_type.from_table{
+    { 1, 2, 3 },
+    { 4, 5, 6 },
+    { 7, 8, 9 }}
+  -- multiply each basis vector with the test matrix
+  g.i_result = vector3_type.transform(g.vi, g.m3x3_2)
+  g.j_result = vector3_type.transform(g.vj, g.m3x3_2)
+  g.k_result = vector3_type.transform(g.vk, g.m3x3_2)
 end
 
 function _update60()
@@ -105,6 +131,19 @@ function _draw()
     print(g.m3x3:to_str())
     print('product:')
     print(g.v3_2:to_str())
+  elseif g.page == 4 then
+    print('basis vectors i, j, and k:')
+    print(g.vi:to_str())
+    print(g.vj:to_str())
+    print(g.vk:to_str())
+    print('transform matrix m:')
+    print(g.m3x3_2:to_str())
+    print('i * m: ' .. g.i_result:to_str())
+    print('j * m: ' .. g.j_result:to_str())
+    print('k * m: ' .. g.k_result:to_str())
+    print('')
+    print('therefore, for any vector:')
+    print('v = vxi + vyj + vzk')
   else
     g.done = true
   end
