@@ -5,7 +5,7 @@ __lua__
 -- coding challenge #29
 -- https://www.youtube.com/watch?v=bGz7mv2vD6g
 
-#include lib/vector.p8:0
+#include lib/vector-old.p8:0
 
 g = { }
 
