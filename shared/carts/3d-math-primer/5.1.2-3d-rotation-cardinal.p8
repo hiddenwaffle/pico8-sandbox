@@ -3,7 +3,6 @@ version 18
 __lua__
 
 #include lib/matrix.p8
-#include lib/vector2.p8
 #include lib/vector3.p8
 
 #include lib/math.p8:0
@@ -16,6 +15,7 @@ function _init()
   g.rotation_type = 0
   g.scratch = vector3_type:new()
   g.cube = {
+    -- main verticies
     vector3_type:new( 0.25,  0.25, -0.25),
     vector3_type:new( 0.25, -0.25, -0.25),
     vector3_type:new(-0.25, -0.25, -0.25),
@@ -31,7 +31,7 @@ function _update60()
   if btnp(5) then
     g.rotation_type += 1
     if (g.rotation_type >= 3) g.rotation_type = 0
-    g.mrot = matrix_type:new(3, 3)
+    g.mrot:reset()
   end
   g.angle += 0.005
   if g.rotation_type == 0 then -- x-axis

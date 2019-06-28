@@ -55,6 +55,14 @@ function matrix_type:copy_from(other)
   return self
 end
 
+function matrix_type:reset()
+  for row = 1, self.rows do
+    for col = 1, self.cols do
+      self[row][col] = 0
+    end
+  end
+end
+
 function matrix_type:scale(s)
   for row = 1, self.rows do
     for col = 1, self.cols do
