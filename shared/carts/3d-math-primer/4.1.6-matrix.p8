@@ -2,7 +2,9 @@ pico-8 cartridge // http://www.pico-8.com
 version 18
 __lua__
 
-#include lib/matrix.p8:0
+#include lib/matrix.p8
+#include lib/vector2.p8
+#include lib/vector3.p8
 
 g = { }
 
@@ -41,8 +43,23 @@ function _init()
     { 5, 6 }}
   -- product of 2x3 times 3x2 matrices
   g.m2x2 = g.m2x3:multiply(g.m3x2)
+  -- vector2
+  g.v2 = vector2_type:new(5, 6)
+  g.m2x2_2 = matrix_type.from_table{
+    { 1, 2 },
+    { 3, 4 }}
+  g.v2_2 = vector2_type:new()
+  g.v2:transform_to_ref(g.m2x2_2, g.v2_2)
+  -- vector3
+  g.v3 = vector3_type:new(1, 2, 3)
+  g.m3x3 = matrix_type.from_table{
+    {  4,  5,  6 },
+    {  7,  8,  9 },
+    { 10, 11, 12 }}
+  g.v3_2 = vector3_type:new()
+  g.v3:transform_to_ref(g.m3x3, g.v3_2)
   -- visualization page starts at 1
-  g.page = 1 -- todo: set back to 1
+  g.page = 3 -- todo: set back to 1
   g.done = false
 end
 
@@ -56,24 +73,38 @@ function _draw()
   color(6)
   if g.page == 1 then
     print('square matrix:')
-    print(g.sm:tostr())
+    print(g.sm:to_str())
     print('square matrix transposed:')
-    print(g.smt:tostr())
+    print(g.smt:to_str())
     print('square matrix transposed twice:')
-    print(g.smtt:tostr())
+    print(g.smtt:to_str())
     print('1x3 matrix:')
-    print(g.m1x3:tostr())
+    print(g.m1x3:to_str())
     print('1x3 matrix transposed:')
-    print(g.m1x3t:tostr())
+    print(g.m1x3t:to_str())
   elseif g.page == 2 then
     print('2x3 matrix:')
-    print(g.m2x3:tostr())
+    print(g.m2x3:to_str())
     print('2x3 matrix if scaled:')
-    print(g.m2x3s:tostr())
+    print(g.m2x3s:to_str())
     print('3x2 matrix:')
-    print(g.m3x2:tostr())
+    print(g.m3x2:to_str())
     print('2x3 times 3x2:')
-    print(g.m2x2:tostr())
+    print(g.m2x2:to_str())
+  elseif g.page == 3 then
+    print('vector2:')
+    print(g.v2:to_str())
+    print('matrix:')
+    print(g.m2x2_2:to_str())
+    print('product:')
+    print(g.v2_2:to_str())
+    print('')
+    print('vector3:')
+    print(g.v3:to_str())
+    print('matrix:')
+    print(g.m3x3:to_str())
+    print('product:')
+    print(g.v3_2:to_str())
   else
     g.done = true
   end

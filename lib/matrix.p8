@@ -2,11 +2,11 @@ pico-8 cartridge // http://www.pico-8.com
 version 18
 __lua__
 
+lib_matrix_defined__ = true
+
 -- based on the babylon.js api
 -- todo: remove assertions? for performance
-matrix_type = {
-  log = 'log'
-}
+matrix_type = { }
 
 function matrix_type:multiply(other)
   local m = matrix_type:new(self.rows, other.cols)
@@ -27,6 +27,7 @@ function matrix_type:multiply_to_ref(other, ref)
       ref[row][col] = sum
     end
   end
+  return self
 end
 
 function matrix_type:new(rows, cols)
@@ -68,7 +69,7 @@ function matrix_type:scale_to_ref(s, ref)
   return self
 end
 
-function matrix_type:tostr()
+function matrix_type:to_str()
   str = ''
   for row = 1, self.rows do
     for col = 1, self.cols do
