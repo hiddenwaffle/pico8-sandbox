@@ -12,6 +12,8 @@ g = { }
 function _init()
   g.angle = 0.10
   g.mrot = matrix_type:new(3, 3)
+  g.mrot = matrix_type:new(3, 3)
+  g.mrot = matrix_type:new(3, 3)
   g.rotation_type = 0
   g.scratch = vector3_type:new()
   g.cube = {
