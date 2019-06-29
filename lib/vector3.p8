@@ -33,3 +33,19 @@ function vector3_type.transform_to_ref(v, m, ref)
   ref.y = v.x * m[1][2] + v.y * m[2][2] + v.z * m[3][2]
   ref.z = v.x * m[1][3] + v.y * m[2][3] + v.z * m[3][3]
 end
+
+function vector3_type.cross(u, v)
+  local ref = vector3_type:new()
+  vector3_type.cross_to_ref(u, v, ref)
+  return ref
+end
+
+function vector3_type.cross_to_ref(u, v, ref)
+  ref.x = u.y * v.z - u.z * v.y
+  ref.y = u.z * v.x - u.x * v.z
+  ref.z = u.x * v.y - u.y * v.x
+end
+
+function vector3_type.dot(u, v)
+  return u.x * v.x + u.y * v.y + u.z * v.z
+end
