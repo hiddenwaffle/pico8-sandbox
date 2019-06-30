@@ -1,10 +1,11 @@
 # PICO-8 related stuff
+*.p8l
 backup
 bbs
 cdata
 config.txt
 cstore
+_label.png
 log.txt
 plates
 sdl_controllers.txt
-*.p8l
