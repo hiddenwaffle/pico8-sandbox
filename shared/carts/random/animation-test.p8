@@ -15,6 +15,8 @@ function _update60()
   if (btn(1)) xacc += 1
   if (btn(2)) yacc -= 1
   if (btn(3)) yacc += 1
+  if (btnp(4)) g.me.spr_index -= 2
+  if (btnp(5)) g.me.spr_index += 2
   g.me:update(xacc, yacc)
 end
 
@@ -29,6 +31,7 @@ entity_type = { }
 
 function entity_type:new()
   local o = {
+    spr_index = 2,
     x = 0,
     y = 0,
     xvel = 0,
@@ -41,10 +44,10 @@ function entity_type:new()
 end
 
 function entity_type:update(xacc, yacc)
-  self:update_position(xacc, yacc)
+  self:apply_acceleration(xacc, yacc)
 end
 
-function entity_type:update_position(xacc, yacc)
+function entity_type:apply_acceleration(xacc, yacc)
   xacc = xacc or 0
   yacc = yacc or 0
   if (xacc < 0) self.facing = 0
@@ -61,7 +64,7 @@ end
 
 function entity_type:draw()
   local flip = self.facing == 0
-  spr(1, self.x, self.y, 2, 2, flip)
+  spr(self.spr_index, self.x, self.y, 2, 2, flip)
 end
 
 __gfx__
