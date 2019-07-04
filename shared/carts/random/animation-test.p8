@@ -35,6 +35,7 @@ end
 function _draw()
   cls(1)
   g.inst:draw(64, 64)
+  print('press x to jump', 4, 4, 7)
 end
 
 -->8
