@@ -55,7 +55,6 @@ function animation_instance_type:update()
       self.animation = self.animation.next
       self.current_frame_index = 1
     end
-    print(self.current_frame_index)
     self.current_ttl = self.animation:ttl_for(self.current_frame_index)
   end
 end
