@@ -5,7 +5,13 @@ __lua__
 g = { }
 
 function _init()
-  local frames = {
+  local standing_frames = {
+    animation_frame_type:new(2, 32767)
+  }
+  local standing_animation = animation_type:new(standing_frames)
+  local standing_inst = animation_instance_type:new(standing_animation)
+  --
+  local a_frames = {
     animation_frame_type:new(1, 10),
     animation_frame_type:new(2, 10),
     animation_frame_type:new(3, 10),
@@ -13,17 +19,22 @@ function _init()
     animation_frame_type:new(4, 10),
     animation_frame_type:new(2, 10),
   }
-  local animation = animation_type:new(frames)
-  g.a_inst = animation_instance_type:new(animation)
+  g.a_animation = animation_type:new(a_frames, standing_animation)
+  local a_inst = animation_instance_type:new(g.a_animation)
+  --
+  g.inst = a_inst
 end
 
 function _update60()
-  g.a_inst:update()
+  if btnp(5) then
+    g.inst:reset(g.a_animation)
+  end
+  g.inst:update()
 end
 
 function _draw()
   cls(1)
-  g.a_inst:draw(64, 64)
+  g.inst:draw(64, 64)
 end
 
 -->8
@@ -42,9 +53,15 @@ function animation_instance_type:new(animation)
 end
 
 function animation_instance_type:draw(x, y)
-  local sprite_index = self.animation.frames[self.current_frame_index].index
-  local flip = self.animation.frames[self.current_frame_index].flip
-  spr(sprite_index, x, y, 1, 1, flip) -- todo: w h
+  local index, flip = self.animation:current(self.current_frame_index)
+  spr(index, x, y, 1, 1, flip) -- todo: w h
+end
+
+-- should match new() -- todo: something else
+function animation_instance_type:reset(animation)
+  self.animation = animation
+  self.current_frame_index = 1
+  self.current_ttl = animation:ttl_for(1)
 end
 
 function animation_instance_type:update()
@@ -71,6 +88,12 @@ function animation_type:new(frames, next)
   setmetatable(o, self)
   self.__index = self
   return o
+end
+
+function animation_type:current(frame_index)
+  local sprite_index = self.frames[frame_index].index
+  local flip = self.frames[frame_index].flip
+  return sprite_index, flip
 end
 
 function animation_type:flip_for(index)
