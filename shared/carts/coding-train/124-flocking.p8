@@ -2,6 +2,8 @@ pico-8 cartridge // http://www.pico-8.com
 version 18
 __lua__
 
+-- https://www.youtube.com/watch?v=mhjuuHl6qHM
+
 #include lib/vector2.p8
 
 width = 128
