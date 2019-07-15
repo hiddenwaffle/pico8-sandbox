@@ -42,13 +42,13 @@ end
 
 function quick_sort(arr, start, finish)
   if (start >= finish) return
-  local index = partition(arr, start, finish)
+  local index = quick_sort_partition(arr, start, finish)
   g.states[index] = -1
   quick_sort(arr, start, index - 1)
   quick_sort(arr, index + 1, finish)
 end
 
-function partition(arr, start, finish)
+function quick_sort_partition(arr, start, finish)
   for i = start, finish do
     g.states[i] = 1
   end
@@ -57,20 +57,20 @@ function partition(arr, start, finish)
   g.states[pivot_index] = 0
   for i = start, finish do
     if arr[i] < pivot_value then
-      swap(arr, i, pivot_index)
+      quick_sort_swap(arr, i, pivot_index)
       g.states[pivot_index] = -1
       pivot_index += 1
       g.states[pivot_index] = 0
     end
   end
-  swap(arr, pivot_index, finish)
+  quick_sort_swap(arr, pivot_index, finish)
   for i = start, finish do
     if (i != pivot_index) g.states[i] = -1
   end
   return pivot_index
 end
 
-function swap(arr, a, b)
+function quick_sort_swap(arr, a, b)
   local tmp = arr[a]
   arr[a] = arr[b]
   arr[b] = tmp

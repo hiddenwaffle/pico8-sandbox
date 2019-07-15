@@ -94,6 +94,14 @@ function vector2_type:set(x, y)
   self.y = y
 end
 
+-- from https://www.youtube.com/watch?v=YNyULRrydVI
+-- is like crossing two 3d vectors with z = 0
+-- returns a scalar because x and y are always 0
+-- used for determining if a vector is to the left or right to another one in 2d.
+function vector2_type.cross(u, v, ref)
+  return u.x * v.y - u.y * v.x
+end
+
 -- scales down to prevent overflow, possible loss of precision
 function vector2_type.distance(v1, v2)
   local x1 = v1.x * 0.001
