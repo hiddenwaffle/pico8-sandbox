@@ -2,7 +2,6 @@ pico-8 cartridge // http://www.pico-8.com
 version 18
 __lua__
 
--- bookmark: 6:10
 -- https://www.youtube.com/watch?v=YNyULRrydVI
 
 #include lib/vector2.p8
