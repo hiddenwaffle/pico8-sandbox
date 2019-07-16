@@ -48,12 +48,15 @@ end
 -- from https://www.lexaloffle.com/bbs/?pid=43636
 -- converts anything to string, even nested tables
 function table_tostring(any)
-  assert(type(any) == 'table')
-  local str = '{ '
-  for k, v in pairs(any) do
-    str = str .. table_tostring(k) .. ' -> ' .. table_tostring(v) .. ' '
+  if type(any) == 'table' then
+    local str = '{ '
+    for k, v in pairs(any) do
+      str = str .. table_tostring(k) .. ' -> ' .. table_tostring(v) .. ' '
+    end
+    return str .. '}'
+  else
+    return tostr(any)
   end
-  return str .. '}'
 end
 
 function table_shallow_index_copy(src)

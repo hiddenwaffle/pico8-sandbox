@@ -18,6 +18,12 @@ function vector2_type:new(x, y)
   return o
 end
 
+function vector2_type:add(other)
+  local ref = self:copy()
+  ref:add_in_place(other)
+  return ref
+end
+
 function vector2_type:add_in_place(other)
   self.x += other.x
   self.y += other.y
@@ -32,12 +38,12 @@ function vector2_type:equals(other)
   return self.x == other.x and self.y == other.y
 end
 
+-- prevents 16-bit overflow by scaling down then back up
+-- todo: use distance() with zero vector instead to reduce duplication
 function vector2_type:length()
-  return sqrt(self:length_squared())
-end
-
-function vector2_type:length_squared()
-  return self.x * self.x + self.y * self.y
+  local x = self.x * 0.001
+  local y = self.y * 0.001
+  return sqrt(x * x + y * y) / 0.001
 end
 
 -- from processing
@@ -50,6 +56,14 @@ function vector2_type:normalize()
   if (m == 0) m = 0.001 -- todo: see what babylon does
   self.x /= m
   self.y /= m
+  return self
+end
+
+-- from processing
+function vector2_type:rotate_in_place(a)
+  local temp = self.x
+  self.x = self.x * cos(a) - self.y * sin(a)
+  self.y = temp * sin(a) + self.y * cos(a)
   return self
 end
 

@@ -2,8 +2,9 @@ pico-8 cartridge // http://www.pico-8.com
 version 18
 __lua__
 
--- bookmark at 33:56
--- issues with photo gets to center of black hole, ejects it
+-- doesn't work quite well, everything gets caught in the black hole
+-- does not include the refactoring done around 40:00
+
 -- https://www.youtube.com/watch?v=Iaz9TqYWUmA
 
 #include lib/vector2.p8
@@ -11,7 +12,7 @@ __lua__
 local width = 128
 local height = 128
 local c = 30
-local G = 4
+local G = 2.5
 local dt = 0.025
 local m87
 local particles = { }
@@ -21,7 +22,7 @@ function _init()
   m87 = black_hole_type:new(64, 64, 1000)
   start = height / 2
   finish = height / 2 - m87.rs * 2.6
-  for y = 0, start, 5 do
+  for y = -50, start, 5 do
     add(particles, photon_type:new(width - 5, y))
   end
 end
@@ -61,10 +62,15 @@ end
 function black_hole_type:pull(photon)
   local force = self.pos:subtract(photon.pos)
   local r = force:length()
-  local fg = G * self.mass / (r * r)
-  force:set_length(fg)
-  photon.vel:add_in_place(force)
-  photon.vel:limit_in_place(c)
+  if r > 0 then -- prevent division by zero
+    local fg = G * self.mass / (r * r)
+    force:set_length(fg)
+    photon.vel:add_in_place(force)
+    photon.vel:set_length(c)
+    if r < self.rs then
+      photon:stop()
+    end
+  end
 end
 
 function black_hole_type:show()
@@ -81,21 +87,27 @@ function photon_type:new(x, y)
   local o = {
     pos = vector2_type:new(x, y),
     vel = vector2_type:new(-c, 0),
-    history = { }
+    history = { },
+    stopped = false
   }
   setmetatable(o, self)
   self.__index = self
   return o
 end
 
+function photon_type:stop()
+  self.stopped = true
+end
+
 function photon_type:update()
-  add(self.history, self.pos:copy())
-  local delta_v = self.vel:copy()
-  delta_v:scale_in_place(dt)
-  -- printh(delta_v.x .. ', ' .. delta_v.y, 'log')
-  self.pos:add_in_place(delta_v)
-  if #self.history > 100 then
-    del(self.history, self.history[1])
+  if not self.stopped then
+    add(self.history, self.pos:copy())
+    local delta_v = self.vel:copy()
+    delta_v:scale_in_place(dt)
+    self.pos:add_in_place(delta_v)
+    if #self.history > 500 then
+      del(self.history, self.history[1])
+    end
   end
 end
 
